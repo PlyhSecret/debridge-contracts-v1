@@ -197,15 +197,14 @@ abstract contract Debridge is
     ) external payable override whenNotPaused() {
         _amount = _send(_debridgeId, _amount, _chainIdTo);
         uint256 nonce = getUserNonce[_receiver];
-        bytes32 sentId =
-            getSubmisionId(
-                _debridgeId,
-                chainId,
-                _chainIdTo,
-                _amount,
-                _receiver,
-                nonce
-            );
+        bytes32 sentId = getSubmisionId(
+            _debridgeId,
+            chainId,
+            _chainIdTo,
+            _amount,
+            _receiver,
+            nonce
+        );
         emit Sent(sentId, _debridgeId, _amount, _receiver, nonce, _chainIdTo);
         getUserNonce[_receiver]++;
     }
@@ -231,15 +230,14 @@ abstract contract Debridge is
             _signature
         );
         uint256 nonce = getUserNonce[_receiver];
-        bytes32 burntId =
-            getSubmisionId(
-                _debridgeId,
-                chainId,
-                _chainIdTo,
-                _amount,
-                _receiver,
-                nonce
-            );
+        bytes32 burntId = getSubmisionId(
+            _debridgeId,
+            chainId,
+            _chainIdTo,
+            _amount,
+            _receiver,
+            nonce
+        );
         emit Burnt(burntId, _debridgeId, _amount, _receiver, nonce, _chainIdTo);
         getUserNonce[_receiver]++;
     }
@@ -266,18 +264,17 @@ abstract contract Debridge is
         require(_amount >= _executionFee, "autoSend: proposed fee too high");
         _amount -= _executionFee;
         uint256 nonce = getUserNonce[_receiver];
-        bytes32 sentId =
-            getAutoSubmisionId(
-                _debridgeId,
-                chainId,
-                _chainIdTo,
-                _amount,
-                _receiver,
-                nonce,
-                _fallbackAddress,
-                _executionFee,
-                _data
-            );
+        bytes32 sentId = getAutoSubmisionId(
+            _debridgeId,
+            chainId,
+            _chainIdTo,
+            _amount,
+            _receiver,
+            nonce,
+            _fallbackAddress,
+            _executionFee,
+            _data
+        );
         emit AutoSent(
             sentId,
             _debridgeId,
@@ -323,18 +320,17 @@ abstract contract Debridge is
         _amount -= _executionFee;
 
         uint256 nonce = getUserNonce[_receiver];
-        bytes32 burntId =
-            getAutoSubmisionId(
-                _debridgeId,
-                chainId,
-                _chainIdTo,
-                _amount,
-                _receiver,
-                nonce,
-                _fallbackAddress,
-                _executionFee,
-                _data
-            );
+        bytes32 burntId = getAutoSubmisionId(
+            _debridgeId,
+            chainId,
+            _chainIdTo,
+            _amount,
+            _receiver,
+            nonce,
+            _fallbackAddress,
+            _executionFee,
+            _data
+        );
         emit AutoBurnt(
             burntId,
             _debridgeId,
@@ -461,7 +457,7 @@ abstract contract Debridge is
         debridge.minAmount = _minAmount;
         debridge.maxAmount = _maxAmount;
         debridge.minReserves = _minReserves;
-        getAmountThreshold[_debridgeId]=_amountThreshold;
+        getAmountThreshold[_debridgeId] = _amountThreshold;
     }
 
     /// @dev Update asset's fees.
@@ -551,24 +547,25 @@ abstract contract Debridge is
     /// @dev Request the assets to be used in defi protocol.
     /// @param _tokenAddress Asset address.
     /// @param _amount Amount of tokens to request.
-    function requestReserves(address _tokenAddress, uint256 _amount)
-        external
-        onlyDefiController()
-    {
+    function requestReserves(
+        address _tokenAddress,
+        uint256 _amount,
+        address _receiver
+    ) external onlyDefiController() {
         bytes32 debridgeId = getDebridgeId(chainId, _tokenAddress);
         DebridgeInfo storage debridge = getDebridge[debridgeId];
-        uint256 minReserves =
-            (debridge.balance * debridge.minReserves) / DENOMINATOR;
+        uint256 minReserves = (debridge.balance * debridge.minReserves) /
+            DENOMINATOR;
         uint256 balance = getBalance(debridge.tokenAddress);
         require(
             minReserves + _amount > balance,
             "requestReserves: not enough reserves"
         );
         if (debridge.tokenAddress == address(0)) {
-            payable(address(defiController)).transfer(_amount);
+            payable(address(_receiver)).transfer(_amount);
         } else {
             IERC20(debridge.tokenAddress).safeTransfer(
-                address(defiController),
+                address(_receiver),
                 _amount
             );
         }
@@ -648,11 +645,12 @@ abstract contract Debridge is
     function _ensureReserves(DebridgeInfo storage _debridge, uint256 _amount)
         internal
     {
-        uint256 minReserves =
-            (_debridge.balance * _debridge.minReserves) / DENOMINATOR;
+        uint256 minReserves = (_debridge.balance * _debridge.minReserves) /
+            DENOMINATOR;
         uint256 balance = getBalance(_debridge.tokenAddress);
-        uint256 requestedReserves =
-            minReserves > _amount ? minReserves : _amount;
+        uint256 requestedReserves = minReserves > _amount
+            ? minReserves
+            : _amount;
         if (requestedReserves > balance) {
             requestedReserves = requestedReserves - balance;
             defiController.claimReserve(
@@ -672,8 +670,9 @@ abstract contract Debridge is
         uint256 _chainIdTo
     ) internal returns (uint256) {
         DebridgeInfo storage debridge = getDebridge[_debridgeId];
-        ChainSupportInfo memory chainSupportInfo =
-            debridge.chainSupported[_chainIdTo];
+        ChainSupportInfo memory chainSupportInfo = debridge.chainSupported[
+            _chainIdTo
+        ];
         require(debridge.chainId == chainId, "send: not native chain");
         require(chainSupportInfo.isSupported, "send: wrong targed chain");
         require(_amount >= debridge.minAmount, "send: amount too low");
@@ -687,10 +686,9 @@ abstract contract Debridge is
                 _amount
             );
         }
-        uint256 transferFee =
-            chainSupportInfo.fixedFee +
-                (_amount * chainSupportInfo.transferFee) /
-                DENOMINATOR;
+        uint256 transferFee = chainSupportInfo.fixedFee +
+            (_amount * chainSupportInfo.transferFee) /
+            DENOMINATOR;
         if (transferFee > 0) {
             require(_amount >= transferFee, "send: amount not cover fees");
             debridge.collectedFees += transferFee;
@@ -712,8 +710,9 @@ abstract contract Debridge is
         bytes memory _signature
     ) internal returns (uint256) {
         DebridgeInfo storage debridge = getDebridge[_debridgeId];
-        ChainSupportInfo memory chainSupportInfo =
-            debridge.chainSupported[_chainIdTo];
+        ChainSupportInfo memory chainSupportInfo = debridge.chainSupported[
+            _chainIdTo
+        ];
         require(debridge.chainId != chainId, "burn: native asset");
         require(chainSupportInfo.isSupported, "burn: wrong targed chain");
         require(_amount >= debridge.minAmount, "burn: amount too low");
@@ -732,10 +731,9 @@ abstract contract Debridge is
             );
         }
         wrappedAsset.transferFrom(msg.sender, address(this), _amount);
-        uint256 transferFee =
-            chainSupportInfo.fixedFee +
-                (_amount * chainSupportInfo.transferFee) /
-                DENOMINATOR;
+        uint256 transferFee = chainSupportInfo.fixedFee +
+            (_amount * chainSupportInfo.transferFee) /
+            DENOMINATOR;
         if (transferFee > 0) {
             require(_amount >= transferFee, "burn: amount not cover fees");
             debridge.collectedFees += transferFee;
@@ -772,13 +770,12 @@ abstract contract Debridge is
                 _executionFee
             );
             IWrappedAsset(debridge.tokenAddress).mint(callProxy, _amount);
-            bool status =
-                ICallProxy(callProxy).callERC20(
-                    debridge.tokenAddress,
-                    _fallbackAddress,
-                    _receiver,
-                    _data
-                );
+            bool status = ICallProxy(callProxy).callERC20(
+                debridge.tokenAddress,
+                _fallbackAddress,
+                _receiver,
+                _data
+            );
             emit AutoRequestExecuted(_submissionId, status);
         } else {
             IWrappedAsset(debridge.tokenAddress).mint(_receiver, _amount);
@@ -811,12 +808,11 @@ abstract contract Debridge is
         if (debridge.tokenAddress == address(0)) {
             if (_executionFee > 0) {
                 payable(msg.sender).transfer(_executionFee);
-                bool status =
-                    ICallProxy(callProxy).call{value: _amount}(
-                        _fallbackAddress,
-                        _receiver,
-                        _data
-                    );
+                bool status = ICallProxy(callProxy).call{value: _amount}(
+                    _fallbackAddress,
+                    _receiver,
+                    _data
+                );
                 emit AutoRequestExecuted(_submissionId, status);
             } else {
                 payable(_receiver).transfer(_amount);
@@ -828,13 +824,12 @@ abstract contract Debridge is
                     _executionFee
                 );
                 IERC20(debridge.tokenAddress).safeTransfer(callProxy, _amount);
-                bool status =
-                    ICallProxy(callProxy).callERC20(
-                        debridge.tokenAddress,
-                        _fallbackAddress,
-                        _receiver,
-                        _data
-                    );
+                bool status = ICallProxy(callProxy).callERC20(
+                    debridge.tokenAddress,
+                    _fallbackAddress,
+                    _receiver,
+                    _data
+                );
                 emit AutoRequestExecuted(_submissionId, status);
             } else {
                 IERC20(debridge.tokenAddress).safeTransfer(_receiver, _amount);

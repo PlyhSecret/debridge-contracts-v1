@@ -51,4 +51,10 @@ interface IDebridge {
         uint256[] memory _supportedChainIds,
         ChainSupportInfo[] memory _chainSupportInfo
     ) external;
+
+    function requestReserves(
+        address _tokenAddress,
+        uint256 _amount,
+        address _receiver
+    ) external;
 }
