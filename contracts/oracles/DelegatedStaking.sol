@@ -569,7 +569,7 @@ contract DelegatedStaking is AccessControl, Initializable {
      */
     function recoverFromEmergency(address _strategy, address[] calldata _oracles) external {
         Strategy storage strategy = strategies[_strategy];
-        DelegatedStakingHelper._validateStrategy(strategy.isEnabled);
+        require(!strategy.isEnabled, "strategy enabled");
         require(strategy.isRecoverable, "not recoverable");
         for (uint256 i=0; i<_oracles.length; i++) {
             UserInfo storage oracle = getUserInfo[_oracles[i]];
