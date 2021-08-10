@@ -42,9 +42,10 @@ library DelegatedStakingHelper {
      * @dev Calculates passed rewards
      * @param _shares Delegator shares
      * @param _accTokens Accumulated tokens per share
+     * @param _sharesDecimals Shares decimals
      */
-    function _calculatePassedRewards(uint256 _shares, uint256 _accTokens) internal pure returns (uint256) {
-        return _shares * _accTokens / 1e18;
+    function _calculateRewards(uint256 _shares, uint256 _accTokens, uint8 _sharesDecimals) internal pure returns (uint256) {
+        return _shares * _accTokens / (10 ** _sharesDecimals);
     }
 
     /**
@@ -295,9 +296,10 @@ contract DelegatedStaking is AccessControl, Initializable {
             delegator.stakes[_collateral].shares += shares;
 
             // accumulated token per share for current collateral
-            delegator.passedRewards[_collateral] = DelegatedStakingHelper._calculatePassedRewards(
+            delegator.passedRewards[_collateral] = DelegatedStakingHelper._calculateRewards(
                             delegator.stakes[_collateral].shares,
-                            oracle.accTokensPerShare[_collateral])
+                            oracle.accTokensPerShare[_collateral],
+                            collaterals[_collateral].decimals)
                             + dependencyRewards;
         }
         else {
@@ -346,9 +348,10 @@ contract DelegatedStaking is AccessControl, Initializable {
             oracle.delegation[_collateral].stakedAmount -= delegatorCollateral;
             
             // recalculate passed rewards with new share amount
-            delegator.passedRewards[_collateral] = DelegatedStakingHelper._calculatePassedRewards(
+            delegator.passedRewards[_collateral] = DelegatedStakingHelper._calculateRewards(
                             delegator.stakes[_collateral].shares,
-                            oracle.accTokensPerShare[_collateral])
+                            oracle.accTokensPerShare[_collateral],
+                            collaterals[_collateral].decimals)
                             + dependencyRewards;
 
             sender.withdrawals[sender.withdrawalCount] = WithdrawalInfo(
@@ -425,9 +428,10 @@ contract DelegatedStaking is AccessControl, Initializable {
             oracle.delegation[withdrawal.collateral].stakedAmount += withdrawal.amount;
 
             // recalculate passed rewards
-            delegator.passedRewards[withdrawal.collateral] = DelegatedStakingHelper._calculatePassedRewards(
+            delegator.passedRewards[withdrawal.collateral] = DelegatedStakingHelper._calculateRewards(
                             delegator.stakes[withdrawal.collateral].shares,
-                            oracle.accTokensPerShare[withdrawal.collateral]);
+                            oracle.accTokensPerShare[withdrawal.collateral],
+                            collaterals[withdrawal.collateral].decimals);
         }
         else {
             withdrawal = oracle.withdrawals[_withdrawalId];
@@ -650,7 +654,7 @@ contract DelegatedStaking is AccessControl, Initializable {
                 totalUSDAmount;
 
             uint256 accTokensPerShare = oracle.delegation[currentCollateral].shares > 0
-                ? accTokens * 1e18 / oracle.delegation[currentCollateral].shares
+                ? accTokens * (10 ** collaterals[currentCollateral].decimals) / oracle.delegation[currentCollateral].shares
                 : 0;
 
             if(currentCollateral==_collateral){
@@ -741,9 +745,10 @@ contract DelegatedStaking is AccessControl, Initializable {
         oracle.delegation[_collateral].shares -= _shares;
         oracle.delegation[_collateral].stakedAmount -= _amount;
         collaterals[_collateral].confiscatedFunds += _amount;
-        delegator.passedRewards[_collateral] = DelegatedStakingHelper._calculatePassedRewards(
+        delegator.passedRewards[_collateral] = DelegatedStakingHelper._calculateRewards(
                             delegator.stakes[_collateral].shares,
-                            oracle.accTokensPerShare[_collateral]);
+                            oracle.accTokensPerShare[_collateral],
+                            collaterals[_collateral].decimals);
         emit LiquidatedDelegator(_oracle, _delegator, _collateral, _amount);
     }
 
@@ -888,9 +893,9 @@ contract DelegatedStaking is AccessControl, Initializable {
 
         for (uint256 i = 0; i < collateralAddresses.length; i++) {
             address rewardCollateral = collateralAddresses[i];
-            uint256 pendingReward = delegator.stakes[rewardCollateral].shares
-                                * oracle.accTokensPerShare[rewardCollateral]
-                                / 1e18;
+            uint256 pendingReward = DelegatedStakingHelper._calculateRewards(delegator.stakes[rewardCollateral].shares,
+                                oracle.accTokensPerShare[rewardCollateral],
+                                collaterals[rewardCollateral].decimals);
 
             // accumulated token per share for collateral that exists reward in rewardCollateral
             uint256 dependencyRewards = _calculateDependencyRewards(_oracle, _sender, rewardCollateral);
@@ -908,9 +913,10 @@ contract DelegatedStaking is AccessControl, Initializable {
             }
 
             // accumulated token per share for current collateral
-            delegator.passedRewards[rewardCollateral] = DelegatedStakingHelper._calculatePassedRewards(
+            delegator.passedRewards[rewardCollateral] = DelegatedStakingHelper._calculateRewards(
                             delegator.stakes[rewardCollateral].shares,
-                            oracle.accTokensPerShare[rewardCollateral])
+                            oracle.accTokensPerShare[rewardCollateral],
+                            collaterals[rewardCollateral].decimals)
                             + dependencyRewards;
 
             if (rewardCollateral == _collateral)
@@ -939,9 +945,9 @@ contract DelegatedStaking is AccessControl, Initializable {
             address collateral = collateralAddresses[k];
                 if(collateral != _rewardCollateral) {
                     dependencyRewards +=
-                            delegator.stakes[collateral].shares
-                            * oracle.dependsAccTokensPerShare[collateral][_rewardCollateral]
-                            / 1e18;
+                            DelegatedStakingHelper._calculateRewards(delegator.stakes[collateral].shares,
+                                oracle.dependsAccTokensPerShare[collateral][_rewardCollateral],
+                                collaterals[collateral].decimals);
                 }
             }
         return dependencyRewards;
