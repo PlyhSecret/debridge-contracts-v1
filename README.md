@@ -1,4 +1,4 @@
-# Debridge Smart Contracts
+Â# Debridge Smart Contracts
 
 # [Complete Documentation https://docs.debridge.finance/](https://docs.debridge.finance/)
 
@@ -96,14 +96,9 @@ Helper for pausable contracts.
 ```
 yarn start-ganache 
 ```
-create .env with 
+Rename `.env.example` to `.env` and fill it with your testnet settings: 
 
-```
-TEST_BSC_PROVIDER=https://bsc-dataseed.binance.org/
-TEST_ORACLE_KEYS=["0x512aba0","0x512aba0"]
-```
-
-Where TEST_ORACLE_KEYS is private keys from ganache
+Where `MNEMONIC` & `TEST_ORACLE_KEYS` & `DEPLOYER_PRIVATE_KEY` are the values from the  from ganache testnet
 
 ```
 yarn test
