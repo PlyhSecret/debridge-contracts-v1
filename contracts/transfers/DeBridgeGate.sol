@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
@@ -18,6 +16,7 @@ import "../interfaces/IConfirmationAggregator.sol";
 import "../interfaces/ICallProxy.sol";
 import "../interfaces/IFlashCallback.sol";
 import "../libraries/SignatureUtil.sol";
+import "../libraries/TransferHelper.sol";
 
 contract DeBridgeGate is Initializable,
                          AccessControlUpgradeable,
@@ -25,7 +24,6 @@ contract DeBridgeGate is Initializable,
                          ReentrancyGuardUpgradeable,
                          IDeBridgeGate {
 
-    using SafeERC20 for IERC20;
     using SignatureUtil for bytes;
 
     /* ========== STATE VARIABLES ========== */
@@ -504,7 +502,8 @@ contract DeBridgeGate is Initializable,
         uint256 currentFlashFee = (_amount * flashFeeBps) / BPS_DENOMINATOR;
         uint256 balanceBefore = IERC20(_tokenAddress).balanceOf(address(this));
 
-        IERC20(_tokenAddress).safeTransfer(_receiver, _amount);
+        TransferHelper.safeTransfer(_tokenAddress, _receiver, _amount);
+
         IFlashCallback(msg.sender).flashCallback(currentFlashFee, _data);
 
         uint256 balanceAfter = IERC20(_tokenAddress).balanceOf(address(this));
@@ -630,11 +629,13 @@ contract DeBridgeGate is Initializable,
 
         IERC20 token = IERC20(debridge.tokenAddress);
         uint256 balanceBefore = token.balanceOf(address(this));
-        token.safeTransferFrom(
+
+        TransferHelper.safeTransferFrom(
+            debridge.tokenAddress,
             msg.sender,
             address(this),
-            _amount
-        );
+            _amount);
+
         // Received real amount
         _amount = token.balanceOf(address(this)) - balanceBefore;
 
@@ -666,12 +667,12 @@ contract DeBridgeGate is Initializable,
         if (debridge.tokenAddress == address(0)) {
             ethAmount += amount;
             if(rewardAmount > 0) {
-                payable(msg.sender).transfer(rewardAmount);
+                TransferHelper.safeTransferETH(msg.sender, rewardAmount);
             }
         } else {
-            IERC20(debridge.tokenAddress).safeTransfer(address(feeProxy), amount);
+            TransferHelper.safeTransfer(debridge.tokenAddress, address(feeProxy), amount);
             if(rewardAmount > 0) {
-                IERC20(debridge.tokenAddress).safeTransfer(msg.sender, rewardAmount);
+                TransferHelper.safeTransfer(debridge.tokenAddress, msg.sender, rewardAmount);
             }
         }
         feeProxy.transferToTreasury{value: ethAmount}(_debridgeId, msg.value, debridge.tokenAddress, debridge.chainId);
@@ -690,12 +691,9 @@ contract DeBridgeGate is Initializable,
         uint256 minReserves = (debridge.balance * debridge.minReservesBps) / BPS_DENOMINATOR;
         require(minReserves + _amount < getBalance(debridge.tokenAddress), "not enough reserves");
         if (debridge.tokenAddress == address(0)) {
-            payable(address(defiController)).transfer(_amount);
+            TransferHelper.safeTransferETH(address(defiController), _amount);
         } else {
-            IERC20(debridge.tokenAddress).safeTransfer(
-                address(defiController),
-                _amount
-            );
+            TransferHelper.safeTransfer(debridge.tokenAddress, address(defiController), _amount);
         }
         debridge.lockedInStrategies += _amount;
     }
@@ -711,11 +709,13 @@ contract DeBridgeGate is Initializable,
         bytes32 debridgeId = getDebridgeId(chainId, _tokenAddress);
         DebridgeInfo storage debridge = getDebridge[debridgeId];
         if (debridge.tokenAddress != address(0)) {
-            IERC20(debridge.tokenAddress).safeTransferFrom(
+            //address(defiController) or msg.sender
+            TransferHelper.safeTransferFrom(
+                debridge.tokenAddress,
                 address(defiController),
                 address(this),
-                _amount
-            );
+                _amount);
+
             debridge.lockedInStrategies -= _amount;
         } else {
             debridge.lockedInStrategies -= msg.value;
@@ -856,11 +856,12 @@ contract DeBridgeGate is Initializable,
          } else {
             IERC20 token = IERC20(debridge.tokenAddress);
             uint256 balanceBefore = token.balanceOf(address(this));
-            token.safeTransferFrom(
+            TransferHelper.safeTransferFrom(
+                debridge.tokenAddress,
                 msg.sender,
                 address(this),
-                _amount
-            );
+                _amount);
+
             // Received real amount
             _amount = token.balanceOf(address(this)) - balanceBefore;
         }
@@ -1003,7 +1004,7 @@ contract DeBridgeGate is Initializable,
         debridge.balance -= _amount;
         if (debridge.tokenAddress == address(0)) {
             if (_executionFee > 0) {
-                payable(msg.sender).transfer(_executionFee);
+                TransferHelper.safeTransferETH(msg.sender, _executionFee);
             }
             if(_data.length > 0)
             {
@@ -1014,14 +1015,14 @@ contract DeBridgeGate is Initializable,
                 );
                 emit AutoRequestExecuted(_submissionId, status);
             } else {
-                payable(_receiver).transfer(_amount);
+                TransferHelper.safeTransferETH(_receiver, _amount);
             }
         } else {
             if (_executionFee > 0) {
-                IERC20(debridge.tokenAddress).safeTransfer(msg.sender, _executionFee);
+                TransferHelper.safeTransfer(debridge.tokenAddress, msg.sender, _executionFee);
             }
             if(_data.length > 0){
-                IERC20(debridge.tokenAddress).safeTransfer(callProxy, _amount);
+                TransferHelper.safeTransfer(debridge.tokenAddress, callProxy, _amount);
                 bool status = ICallProxy(callProxy).callERC20(
                     debridge.tokenAddress,
                     _fallbackAddress,
@@ -1030,7 +1031,7 @@ contract DeBridgeGate is Initializable,
                 );
                 emit AutoRequestExecuted(_submissionId, status);
             } else {
-                IERC20(debridge.tokenAddress).safeTransfer(_receiver, _amount);
+                TransferHelper.safeTransfer(debridge.tokenAddress, _receiver, _amount);
             }
         }
         emit Claimed(_submissionId, _amount, _receiver, _debridgeId);
