@@ -47,6 +47,14 @@ module.exports = {
       port: 8545, // Standard Ethereum port (default: none)
       network_id: "*", // Any network (default: none),
       // from: process.env.TEST_DEPLOYER_ACCOUNT,
+      provider: () =>
+      new HDWalletProvider(
+        [process.env.DEPLOYER_PRIVATE_KEY],
+        "ws://127.0.0.1:8545",
+        0,
+        1
+      ),
+      networkCheckTimeout: 1000000
     },
     test: {
       host: "127.0.0.1", // Localhost (default: none)
@@ -59,7 +67,7 @@ module.exports = {
       provider: () =>
         new HDWalletProvider(
           [process.env.DEPLOYER_PRIVATE_KEY],
-          "https://kovan.infura.io/v3/" + process.env.INFURA_ID,
+          "wss://kovan.infura.io/ws/v3/9aa3d95b3bc440fa88ea12eaa4456161",
           0,
           1
         ),
@@ -68,6 +76,7 @@ module.exports = {
       from: process.env.DEPLOYER_ACCOUNT,
       timeoutBlocks: 5000,
       skipDryRun: true,
+      networkCheckTimeout: 1000000
     },
     kovantest: {
       network_id: "42",

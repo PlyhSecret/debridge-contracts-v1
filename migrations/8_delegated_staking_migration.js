@@ -3,7 +3,7 @@ const { getLinkAddress } = require("./utils");
 const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 
 module.exports = async function(deployer, network) {
-  if (network == "test") return;
+  return;
   const link = await getLinkAddress(deployer, network);
   const DelegatedStakingInitParams = require("../assets/delegatedStakingInitParams")[network];
   await deployProxy(

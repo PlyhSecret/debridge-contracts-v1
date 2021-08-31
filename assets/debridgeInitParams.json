@@ -29,7 +29,7 @@
   "kovan": {
     "wrappedAssetAdmin": "0x6CDf260c39A390fE3249d7FA3ba4986b17d109E0",
     "minConfirmations": 2,
-    "confirmationThreshold": 3,
+    "confirmationThreshold": 2,
     "excessConfirmations": 3,
     "oracles": [
       {
@@ -109,9 +109,9 @@
   },
   "development": {
     "wrappedAssetAdmin": "0x6CDf260c39A390fE3249d7FA3ba4986b17d109E0",
-    "minConfirmations": 2,
+    "minConfirmations": 1,
     "confirmationThreshold": 3,
-    "excessConfirmations": 3,
+    "excessConfirmations": 2,
     "oracles": [
       {
         "address": "0xbf6166fa3ef227ed400b1708fa478dcae38969ac",

@@ -1,4 +1,5 @@
 const DefiController = artifacts.require("DefiController");
+const { deployProxy } = require("@openzeppelin/truffle-upgrades");
 
 module.exports = async function (deployer, network) {
   // if (network == "test") return;

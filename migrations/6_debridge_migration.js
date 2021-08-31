@@ -1,5 +1,4 @@
 const DeBridgeGate = artifacts.require("DeBridgeGate");
-const ConfirmationAggregator = artifacts.require("ConfirmationAggregator");
 const SignatureVerifier = artifacts.require("SignatureVerifier");
 const CallProxy = artifacts.require("CallProxy");
 const FeeProxy = artifacts.require("FeeProxy");
@@ -15,55 +14,34 @@ module.exports = async function(deployer, network) {
   let debridgeInstance;
   let weth = await getWeth(deployer, network);
   console.log("weth: " + weth);
-  if (debridgeInitParams.type == "full") {
-    //   function initialize(
-    //     uint256 _excessConfirmations,
-    //     address _signatureVerifier,
-    //     address _confirmationAggregator,
-    //     address _callProxy,
-    //     IWETH _weth,
-    //     IFeeProxy _feeProxy,
-    //     IDefiController _defiController,
-    // )
-    await deployProxy(
-      DeBridgeGate,
-      [
-        debridgeInitParams.excessConfirmations,
-        ZERO_ADDRESS, //SignatureVerifier.address.toString(),
-        ConfirmationAggregator.address.toString(),
-        CallProxy.address.toString(),
-        weth,
-        FeeProxy.address.toString(),
-        DefiController.address.toString(),
-      ],
-      { deployer }
-    );
-    aggregatorInstance = await ConfirmationAggregator.deployed();
-    debridgeInstance = await DeBridgeGate.deployed();
 
-    console.log("ConfirmationAggregator: " + aggregatorInstance.address);
-    console.log("DeBridgeGate: " + debridgeInstance.address);
-  } else {
-    await deployProxy(
-      DeBridgeGate,
-      [
-        debridgeInitParams.excessConfirmations,
-        SignatureVerifier.address.toString(),
-        ZERO_ADDRESS, //ConfirmationAggregator.address.toString(),
-        CallProxy.address.toString(),
-        DefiController.address.toString(),
-        weth,
-        FeeProxy.address.toString(),
-        DefiController.address.toString(),
-      ],
-      { deployer }
-    );
-    aggregatorInstance = await SignatureVerifier.deployed();
-    debridgeInstance = await DeBridgeGate.deployed();
+//   function initialize(
+//     uint8 _excessConfirmations,
+//     address _signatureVerifier,
+//     address _confirmationAggregator,
+//     address _callProxy,
+//     IWETH _weth,
+//     address _feeProxy,
+//     address _defiController
+// )
+  await deployProxy(
+    DeBridgeGate,
+    [
+      debridgeInitParams.excessConfirmations,
+      SignatureVerifier.address.toString(),
+      ZERO_ADDRESS, //ConfirmationAggregator.address.toString(),
+      CallProxy.address.toString(),
+      weth,
+      FeeProxy.address.toString(),
+      DefiController.address.toString(),
+    ],
+    { deployer }
+  );
+  aggregatorInstance = await SignatureVerifier.deployed();
+  debridgeInstance = await DeBridgeGate.deployed();
 
-    console.log("ConfirmationAggregator: " + aggregatorInstance.address);
-    console.log("DeBridgeGate: " + debridgeInstance.address);
-  }
+  console.log("DeBridgeGate: " + debridgeInstance.address);
+
   await aggregatorInstance.setDebridgeAddress(
     debridgeInstance.address.toString()
   );
