@@ -1788,6 +1788,55 @@ contract("DeBridgeGate real pipeline mode", function () {
         return x.event == "Sent";
       });
       this.nativeSubmission = sentEvent;
+
+      console.log(sentEvent);
+
+      const _chainIdFrom = (await this.debridgeBSC.getChainId()).toString();
+
+      console.log(`submissionId: ${sentEvent.args.submissionId}`);
+      console.log(`_debridgeId: ${sentEvent.args.debridgeId}`);
+      console.log(`_chainIdFrom: ${_chainIdFrom}`);
+      console.log(`_chainIdTo ${sentEvent.args.chainIdTo}`);
+      console.log(`_amount: ${sentEvent.args.amount.toString()}`);
+      console.log(`_receiver: ${sentEvent.args.receiver}`);
+      console.log(`_nonce: ${sentEvent.args.nonce.toString()}`);
+
+      console.log(`executionFee: ${sentEvent.args.autoParams.executionFee.toString()}`);
+      console.log(`flags: ${sentEvent.args.autoParams.flags.toString()}`);
+      console.log(`fallbackAddress: ${sentEvent.args.autoParams.fallbackAddress.toString()}`);
+      console.log(`data: ${sentEvent.args.autoParams.data.toString()}`);
+
+      console.log(`hasAutoParams: false`);
+      console.log(`nativeSender: ${sentEvent.args.nativeSender}`);
+
+
+      // bytes32 _debridgeId,
+      // uint256 _chainIdFrom,
+      // uint256 _chainIdTo,
+      // uint256 _amount,
+      // address _receiver,
+      // uint256 _nonce,
+      // bytes calldata _autoParams
+      const mockGetEncodeDataSubmission = await this.debridgeBSC.mockGetEncodeDataSubmission(
+        sentEvent.args.debridgeId,
+        _chainIdFrom,
+        sentEvent.args.chainIdTo,
+        sentEvent.args.amount,
+        sentEvent.args.receiver,
+        sentEvent.args.nonce,
+        []);
+
+      const mockGetSubmissionId = await this.debridgeBSC.mockGetSubmissionId(
+        sentEvent.args.debridgeId,
+        _chainIdFrom,
+        sentEvent.args.chainIdTo,
+        sentEvent.args.amount,
+        sentEvent.args.receiver,
+        sentEvent.args.nonce,
+        []);
+      console.log(`mockGetEncodeDataSubmission: ${mockGetEncodeDataSubmission}`);
+      console.log(`mockGetSubmissionId: ${mockGetSubmissionId}`);
+      assert.equal(mockGetSubmissionId, sentEvent.args.submissionId);
       this.sentEventsBSC.push(sentEvent);
 
       const newBalance = toBN(await this.wethBSC.balanceOf(this.debridgeBSC.address));
@@ -2050,7 +2099,78 @@ contract("DeBridgeGate real pipeline mode", function () {
         true,
       );
 
+
+      console.log()
       assert.equal(sentEvent.args.submissionId, submissionIdFrom);
+
+
+
+
+      console.log(sentEvent);
+
+      const _chainIdFrom = ethChainId;
+
+      console.log(`submissionId: ${sentEvent.args.submissionId}`);
+      console.log(`_debridgeId: ${sentEvent.args.debridgeId}`);
+      console.log(`_chainIdFrom: ${_chainIdFrom}`);
+      console.log(`_chainIdTo ${sentEvent.args.chainIdTo}`);
+      console.log(`_amount: ${sentEvent.args.amount.toString()}`);
+      console.log(`_receiver: ${sentEvent.args.receiver}`);
+      console.log(`_nonce: ${sentEvent.args.nonce.toString()}`);
+
+      console.log(`executionFee: ${sentEvent.args.autoParams.executionFee.toString()}`);
+      console.log(`flags: ${sentEvent.args.autoParams.flags.toString()}`);
+      console.log(`fallbackAddress: ${sentEvent.args.autoParams.fallbackAddress.toString()}`);
+      console.log(`data: ${sentEvent.args.autoParams.data.toString()}`);
+
+      console.log(`hasAutoParams: true`);
+      console.log(`nativeSender: ${sentEvent.args.nativeSender}`);
+
+
+
+      console.log(`feeParams receivedAmount: ${sentEvent.args.feeParams.receivedAmount.toString()}`);
+      console.log(`fixFee: ${sentEvent.args.feeParams.fixFee.toString()}`);
+      console.log(`transferFee: ${sentEvent.args.feeParams.transferFee.toString()}`);
+      console.log(`useAssetFee: ${sentEvent.args.feeParams.useAssetFee.toString()}`);
+      console.log(`isNativeToken: ${sentEvent.args.feeParams.isNativeToken.toString()}`);
+
+
+      // bytes32 _debridgeId,
+      // uint256 _chainIdFrom,
+      // uint256 _chainIdTo,
+      // uint256 _amount,
+      // address _receiver,
+      // uint256 _nonce,
+      // bytes calldata _autoParams
+
+      const _autoParams = packSubmissionAutoParamsFrom(
+                              executionFee,
+                              flags,
+                              fallbackAddress,
+                              data,
+                              sender.address)
+
+      const mockGetEncodeDataSubmission = await this.debridgeBSC.mockGetEncodeDataSubmission(
+        sentEvent.args.debridgeId,
+        _chainIdFrom,
+        sentEvent.args.chainIdTo,
+        sentEvent.args.amount,
+        sentEvent.args.receiver,
+        sentEvent.args.nonce,
+        _autoParams);
+
+      const mockGetSubmissionId = await this.debridgeBSC.mockGetSubmissionId(
+        sentEvent.args.debridgeId,
+        _chainIdFrom,
+        sentEvent.args.chainIdTo,
+        sentEvent.args.amount,
+        sentEvent.args.receiver,
+        sentEvent.args.nonce,
+        _autoParams);
+      console.log(`mockGetEncodeDataSubmission: ${mockGetEncodeDataSubmission}`);
+      console.log(`mockGetSubmissionId: ${mockGetSubmissionId}`);
+      assert.equal(mockGetSubmissionId, sentEvent.args.submissionId);
+
     });
   });
 
@@ -2218,6 +2338,72 @@ contract("DeBridgeGate real pipeline mode", function () {
         // worker should receive executionFee in weth
         const workerBalanceWETHAfter = toBN(await this.wethETH.balanceOf(workerAccount.address));
         assert.equal(workerBalanceWETHAfter.toString(), workerBalanceWETHBefore.add(executionFee).toString());
+
+        console.log(burnEvent);
+
+        const _chainIdFrom = bscChainId;
+
+        console.log(`submissionId: ${burnEvent.args.submissionId}`);
+        console.log(`_debridgeId: ${burnEvent.args.debridgeId}`);
+        console.log(`_chainIdFrom: ${_chainIdFrom}`);
+        console.log(`_chainIdTo ${burnEvent.args.chainIdTo}`);
+        console.log(`_amount: ${burnEvent.args.amount.toString()}`);
+        console.log(`_receiver: ${burnEvent.args.receiver}`);
+        console.log(`_nonce: ${burnEvent.args.nonce.toString()}`);
+
+        console.log(`executionFee: ${burnEvent.args.autoParams.executionFee.toString()}`);
+        console.log(`flags: ${burnEvent.args.autoParams.flags.toString()}`);
+        console.log(`fallbackAddress: ${burnEvent.args.autoParams.fallbackAddress.toString()}`);
+        console.log(`data: ${burnEvent.args.autoParams.data.toString()}`);
+
+        console.log(`hasAutoParams: true`);
+        console.log(`nativeSender: ${burnEvent.args.nativeSender}`);
+
+
+
+        console.log(`feeParams receivedAmount: ${burnEvent.args.feeParams.receivedAmount.toString()}`);
+        console.log(`fixFee: ${burnEvent.args.feeParams.fixFee.toString()}`);
+        console.log(`transferFee: ${burnEvent.args.feeParams.transferFee.toString()}`);
+        console.log(`useAssetFee: ${burnEvent.args.feeParams.useAssetFee.toString()}`);
+        console.log(`isNativeToken: ${burnEvent.args.feeParams.isNativeToken.toString()}`);
+
+
+        // bytes32 _debridgeId,
+        // uint256 _chainIdFrom,
+        // uint256 _chainIdTo,
+        // uint256 _amount,
+        // address _receiver,
+        // uint256 _nonce,
+        // bytes calldata _autoParams
+
+        const _autoParams = packSubmissionAutoParamsFrom(
+                                executionFee,
+                                flags,
+                                fallbackAddress,
+                                autoData,
+                                bscAccount.address)
+
+        const mockGetEncodeDataSubmission = await this.debridgeBSC.mockGetEncodeDataSubmission(
+          burnEvent.args.debridgeId,
+          _chainIdFrom,
+          burnEvent.args.chainIdTo,
+          burnEvent.args.amount,
+          burnEvent.args.receiver,
+          burnEvent.args.nonce,
+          _autoParams);
+
+        const mockGetSubmissionId = await this.debridgeBSC.mockGetSubmissionId(
+          burnEvent.args.debridgeId,
+          _chainIdFrom,
+          burnEvent.args.chainIdTo,
+          burnEvent.args.amount,
+          burnEvent.args.receiver,
+          burnEvent.args.nonce,
+          _autoParams);
+        console.log(`mockGetEncodeDataSubmission: ${mockGetEncodeDataSubmission}`);
+        console.log(`mockGetSubmissionId: ${mockGetSubmissionId}`);
+        assert.equal(mockGetSubmissionId, burnEvent.args.submissionId);
+
       });
 
       it("should burn/claim with UNWRAP_ETH flag with auto call data", async function() {

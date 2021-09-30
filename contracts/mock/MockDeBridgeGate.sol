@@ -79,6 +79,79 @@ contract MockDeBridgeGate is DeBridgeGate {
             );
     }
 
+
+    function mockGetSubmissionId(
+        bytes32 _debridgeId,
+        uint256 _chainIdFrom,
+        uint256 _chainIdTo,
+        uint256 _amount,
+        address _receiver,
+        uint256 _nonce,
+        bytes calldata _autoParams
+    ) public pure returns (bytes32) {
+
+        bytes memory packedSubmission = abi.encodePacked(
+            _debridgeId,
+            _chainIdFrom,
+            _chainIdTo,
+            _amount,
+            _receiver,
+            _nonce
+        );
+        if (_autoParams.length > 0) {
+            SubmissionAutoParamsFrom memory autoParams = abi.decode(_autoParams, (SubmissionAutoParamsFrom));
+            // auto submission
+            return keccak256(
+                abi.encodePacked(
+                    packedSubmission,
+                    autoParams.executionFee,
+                    autoParams.flags,
+                    autoParams.fallbackAddress,
+                    autoParams.data,
+                    autoParams.nativeSender
+                )
+            );
+        }
+        // regular submission
+        return keccak256(packedSubmission);
+    }
+
+     function mockGetEncodeDataSubmission(
+        bytes32 _debridgeId,
+        uint256 _chainIdFrom,
+        uint256 _chainIdTo,
+        uint256 _amount,
+        address _receiver,
+        uint256 _nonce,
+        bytes calldata _autoParams
+        // SubmissionAutoParamsFrom memory autoParams,
+        // bool hasAutoParams
+    ) public pure returns (bytes memory) {
+
+        bytes memory packedSubmission = abi.encodePacked(
+            _debridgeId,
+            _chainIdFrom,
+            _chainIdTo,
+            _amount,
+            _receiver,
+            _nonce
+        );
+        if (_autoParams.length > 0) {
+            SubmissionAutoParamsFrom memory autoParams = abi.decode(_autoParams, (SubmissionAutoParamsFrom));
+            // auto submission
+            abi.encodePacked(
+                    packedSubmission,
+                    autoParams.executionFee,
+                    autoParams.flags,
+                    autoParams.fallbackAddress,
+                    autoParams.data,
+                    autoParams.nativeSender
+            );
+        }
+        // regular submission
+        return packedSubmission;
+    }
+
     // function getEncodePackedFROM(
     //     bytes memory _nativeSender,
     //     bytes32 _debridgeId,
