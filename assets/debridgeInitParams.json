@@ -48,7 +48,7 @@
     "deploy":{
       "DBR": true,
       "SignatureVerifier": true,
-      "SignatureAggregator": false,
+      "SignatureAggregator": true,
       "ConfirmationAggregator": false,
       "DefiController": false
     },
@@ -89,13 +89,13 @@
     "deploy":{
       "DBR": false,
       "SignatureVerifier": true,
-      "SignatureAggregator": false,
+      "SignatureAggregator": true,
       "ConfirmationAggregator": false,
       "DefiController": false
     },
     "external": {
       "WETH": "",
-      "UniswapFactory": ""
+      "UniswapFactory": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
     },
     "supportedChains": [97, 42, 421611],
     "fixedNativeFee": ["100000000000000", "100000000000000", "100000000000000"],
@@ -130,13 +130,13 @@
     "deploy":{
       "DBR": false,
       "SignatureVerifier": true,
-      "SignatureAggregator": false,
+      "SignatureAggregator": true,
       "ConfirmationAggregator": false,
       "DefiController": false
     },
     "external": {
       "WETH": "",
-      "UniswapFactory": ""
+      "UniswapFactory": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
     },
     "supportedChains": [256, 42, 421611],
     "fixedNativeFee": ["100000000000000", "100000000000000", "100000000000000"],
@@ -177,7 +177,7 @@
     },
     "external": {
       "WETH": "",
-      "UniswapFactory": ""
+      "UniswapFactory": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
     },
     "supportedChains": [256, 42, 97],
     "fixedNativeFee": ["100000000000000", "100000000000000", "100000000000000"],
