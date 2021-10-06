@@ -558,7 +558,7 @@ contract("DelegatedStaking", function () {
 
         const balanceBefore = toBN(await collateralToken.balanceOf(this.delegatedStaking.address));
         const totalUSDAmountBefore = await this.delegatedStaking.getTotalETHAmount(validatorAddress);
-        const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(validatorAddress, collateralAddress);
+        const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(validatorAddress, collateralAddress);
         const prevCollateral = await this.delegatedStaking.collaterals(collateralAddress);
 
         await this.delegatedStaking.connect(delegarorAccount).stake(delegarorAccount.address, validatorAddress, collateralAddress, amount);
@@ -566,7 +566,7 @@ contract("DelegatedStaking", function () {
         const balanceAfter = toBN(await collateralToken.balanceOf(this.delegatedStaking.address));
         const totalUSDAmountAfter = await this.delegatedStaking.getTotalETHAmount(validatorAddress);
         const currentDelegatorsInfo = await this.delegatedStaking.getDelegatorsInfo(validatorAddress, collateralAddress, delegarorAddress);
-        const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(validatorAddress, collateralAddress);
+        const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(validatorAddress, collateralAddress);
         const currentCollateral = await this.delegatedStaking.collaterals(collateralAddress);
 
         // console.log("before stake");
@@ -621,13 +621,13 @@ contract("DelegatedStaking", function () {
         const prevDelegatorsInfo = await this.delegatedStaking.getDelegatorsInfo(validatorAddress, collateralAddress, delegarorAddress);
         const balanceBefore = toBN(await collateralToken.balanceOf(this.delegatedStaking.address));
         const totalUSDAmountBefore = await this.delegatedStaking.getTotalETHAmount(validatorAddress);
-        const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(validatorAddress, collateralAddress);
+        const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(validatorAddress, collateralAddress);
         const prevCollateral = await this.delegatedStaking.collaterals(collateralAddress);
         await this.delegatedStaking.connect(delegarorAccount).stake(delegarorAccount.address, validatorAddress, collateralAddress, amount);
         const balanceAfter = toBN(await collateralToken.balanceOf(this.delegatedStaking.address));
         const totalUSDAmountAfter = await this.delegatedStaking.getTotalETHAmount(validatorAddress);
         const currentDelegatorsInfo = await this.delegatedStaking.getDelegatorsInfo(validatorAddress, collateralAddress, delegarorAddress);
-        const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(validatorAddress, collateralAddress);
+        const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(validatorAddress, collateralAddress);
         const currentCollateral = await this.delegatedStaking.collaterals(collateralAddress);
 
         assert.equal(balanceBefore.add(amount).toString(), balanceAfter.toString());
@@ -665,13 +665,13 @@ contract("DelegatedStaking", function () {
 
         const balanceBefore = toBN(await collateralToken.balanceOf(this.delegatedStaking.address));
         const totalUSDAmountBefore = await this.delegatedStaking.getTotalETHAmount(validatorAddress);
-        const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(validatorAddress, collateralAddress);
+        const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(validatorAddress, collateralAddress);
         const prevCollateral = await this.delegatedStaking.collaterals(collateralAddress);
         await this.delegatedStaking.connect(delegarorAccount).stake(delegarorAccount.address, validatorAddress, collateralAddress, amount);
         const balanceAfter = toBN(await collateralToken.balanceOf(this.delegatedStaking.address));
         const totalUSDAmountAfter = await this.delegatedStaking.getTotalETHAmount(validatorAddress);
         const currentDelegatorsInfo = await this.delegatedStaking.getDelegatorsInfo(validatorAddress, collateralAddress, delegarorAddress);
-        const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(validatorAddress, collateralAddress);
+        const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(validatorAddress, collateralAddress);
         const currentCollateral = await this.delegatedStaking.collaterals(collateralAddress);
 
         assert.equal(balanceBefore.add(amount).toString(), balanceAfter.toString());
@@ -871,9 +871,9 @@ contract("DelegatedStaking", function () {
         // await this.delegatedStaking.addValidator(david, alice, 1, 5000);
         // await this.delegatedStaking.addValidator(sarah, alice, 2, 10000);
 
-        const bobValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(bob, this.rewardCollateralAddress);
-        const davidValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(david, this.rewardCollateralAddress);
-        const sarahValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(sarah, this.rewardCollateralAddress);
+        const bobValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(bob, this.rewardCollateralAddress);
+        const davidValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(david, this.rewardCollateralAddress);
+        const sarahValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(sarah, this.rewardCollateralAddress);
         //TODO: check validatorCollateral.stakedAmount
         //how many reward tokens was earned
         assert.equal(bobValidatorCollateral.accumulatedRewards.toString(), "250000000"); //1000*1/4=250 USDT
@@ -1130,9 +1130,9 @@ contract("DelegatedStaking", function () {
     it("should unstake 5 tokens", async function () {
       const amount = toWei("5");
       const collateral = this.linkToken.address;
-      const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(bob, collateral);
+      const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(bob, collateral);
       await this.delegatedStaking.requestUnstake(bob, collateral, alice, amount);
-      const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(bob, collateral);
+      const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(bob, collateral);
       assert.equal(
         prevValidatorCollateral.shares.sub(amount).toString(),
         currentValidatorCollateral.shares.toString(),
@@ -1180,10 +1180,10 @@ contract("DelegatedStaking", function () {
     it("should unstake 5 shares", async function () {
       const amount = toWei("5");
       const collateral = this.linkToken.address;
-      const prevCollateral = await this.delegatedStaking.getValidatorCollateral(david, collateral);
+      const prevCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(david, collateral);
       const prevDelegation = await this.delegatedStaking.getDelegatorsInfo(david, collateral, eve);
       await this.delegatedStaking.connect(eveAccount).requestUnstake(david, collateral, eve, amount);
-      const currentCollateral = await this.delegatedStaking.getValidatorCollateral(david, collateral);
+      const currentCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(david, collateral);
       const currentDelegation = await this.delegatedStaking.getDelegatorsInfo(david, collateral, eve);
       assert.equal(
         prevCollateral.shares.sub(toBN(amount)).toString(),
@@ -1248,10 +1248,10 @@ contract("DelegatedStaking", function () {
       const withdrawalId = 0;
       const prevWithdrawalInfo = await this.delegatedStaking.getWithdrawalRequest(sarah, withdrawalId)
       const collateral = prevWithdrawalInfo.collateral;
-      const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(sarah, collateral);
+      const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(sarah, collateral);
       const prevCollateral = await this.delegatedStaking.collaterals(collateral);
       await this.delegatedStaking.executeUnstake(sarah, [withdrawalId]);
-      const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(sarah, collateral);
+      const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(sarah, collateral);
       const currentCollateral = await this.delegatedStaking.collaterals(collateral);
       const currentWithdrawalInfo = await this.delegatedStaking.getWithdrawalRequest(sarah, withdrawalId);
 
@@ -1284,11 +1284,11 @@ contract("DelegatedStaking", function () {
       const amount = toWei("10");
       const collateral = this.linkToken.address;
       await this.delegatedStaking.requestUnstake(sarah, collateral, alice, amount);
-      const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(sarah, collateral);
+      const prevValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(sarah, collateral);
       const prevCollateral = await this.delegatedStaking.collaterals(collateral);
       const lastWithdrawalId = await this.delegatedStaking.getWithdrawalRequests(sarah);
       await this.delegatedStaking.cancelUnstake(sarah, [lastWithdrawalId - 1]);
-      const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateral(sarah, collateral);
+      const currentValidatorCollateral = await this.delegatedStaking.getValidatorCollateralByAddress(sarah, collateral);
       const currentCollateral = await this.delegatedStaking.collaterals(collateral);
       assert.equal(
         prevValidatorCollateral.shares.add(amount).toString(),
