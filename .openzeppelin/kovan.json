@@ -1,0 +1,116 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [],
+  "impls": {
+    "eb4caaacee9ef640f51d61d4d4939cfbd8669f31f79ac81e21b18377044b65e3": {
+      "address": "0x0178e047756842cEC731BA4978F3A5cFb552F2AD",
+      "txHash": "0xd7959c6ca69797cc8ffb8394e74563cd77ad701d9842cdb307ec38e026f52750",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)89_storage)",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "DeBridgeTokenDeployer",
+            "label": "tokenImplementation",
+            "type": "t_address",
+            "src": "contracts\\transfers\\DeBridgeTokenDeployer.sol:20"
+          },
+          {
+            "contract": "DeBridgeTokenDeployer",
+            "label": "deBridgeTokenAdmin",
+            "type": "t_address",
+            "src": "contracts\\transfers\\DeBridgeTokenDeployer.sol:22"
+          },
+          {
+            "contract": "DeBridgeTokenDeployer",
+            "label": "debridgeAddress",
+            "type": "t_address",
+            "src": "contracts\\transfers\\DeBridgeTokenDeployer.sol:24"
+          },
+          {
+            "contract": "DeBridgeTokenDeployer",
+            "label": "getDeployedAssetAddress",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "src": "contracts\\transfers\\DeBridgeTokenDeployer.sol:26"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)89_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_struct(RoleData)89_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    }
+  }
+}

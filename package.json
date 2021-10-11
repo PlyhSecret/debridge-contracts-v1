@@ -11,7 +11,6 @@
     "compile": "hardhat compile",
     "build": "hardhat build",
     "start-ganache": "ganache-cli --chainId 1 --seed alice",
-    "pretest": "$npm_execpath compile",
     "test": "hardhat test",
     "contract-size": "hardhat size-contracts",
     "coverage": "hardhat coverage"
