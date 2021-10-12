@@ -24,15 +24,17 @@
     },
     "supportedChains": [42, 97],
     "fixedNativeFee": ["100000000000000", "100000000000000"],
+    "globalFixedNativeFee": "100000000000000",
+    "globalTransferFeeBps": "50",
     "chainSupportInfo": [
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       },
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       }
     ]
@@ -62,20 +64,22 @@
     },
     "supportedChains": [97, 256, 421611],
     "fixedNativeFee": ["100000000000000", "100000000000000", "100000000000000"],
+    "globalFixedNativeFee": "100000000000000",
+    "globalTransferFeeBps": "50",
     "chainSupportInfo": [
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       },
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       },
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       }
     ]
@@ -105,20 +109,22 @@
     },
     "supportedChains": [97, 42, 421611],
     "fixedNativeFee": ["100000000000000", "100000000000000", "100000000000000"],
+    "globalFixedNativeFee": "100000000000000",
+    "globalTransferFeeBps": "50",
     "chainSupportInfo": [
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       },
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       },
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       }
     ]
@@ -148,20 +154,22 @@
     },
     "supportedChains": [256, 42, 421611],
     "fixedNativeFee": ["100000000000000", "100000000000000", "100000000000000"],
+    "globalFixedNativeFee": "100000000000000",
+    "globalTransferFeeBps": "50",
     "chainSupportInfo": [
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       },
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       },
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       }
     ]
@@ -191,20 +199,22 @@
     },
     "supportedChains": [256, 42, 97],
     "fixedNativeFee": ["100000000000000", "100000000000000", "100000000000000"],
+    "globalFixedNativeFee": "100000000000000",
+    "globalTransferFeeBps": "50",
     "chainSupportInfo": [
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       },
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       },
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       }
     ]
@@ -234,15 +244,17 @@
     },
     "supportedChains": [42, 97],
     "fixedNativeFee": ["100000000000000", "100000000000000"],
+    "globalFixedNativeFee": "100000000000000",
+    "globalTransferFeeBps": "50",
     "chainSupportInfo": [
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       },
       {
-        "fixedNativeFee": "100000000000000",
-        "transferFeeBps": "50",
+        "fixedNativeFee": "0",
+        "transferFeeBps": "0",
         "isSupported": true
       }
     ]
