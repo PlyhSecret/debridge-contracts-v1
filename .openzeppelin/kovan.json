@@ -70,6 +70,11 @@
       "address": "0xE89B08dFbeaC29Bcccf54AAA41B9cf5237749e9D",
       "txHash": "0x0b75c480a6e92757935ad9b0a2b347b74119c05443c8aa138199deb753fa3c5b",
       "kind": "transparent"
+    },
+    {
+      "address": "0x0B7384a37B0098f996Ff5afc35ec4709cD61b3d4",
+      "txHash": "0x19ed4fd156d5143c2d45b92577a9ace35258799bffa27fcfe5b1c160b06a84d9",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -1317,6 +1322,107 @@
     "754593ff3b024ef279f4cac5e0a5e263354688cd2ac2d6095a83c998bb015728": {
       "address": "0x6b5d1aBb726eb3bc2eB6A019AaF646020C30550e",
       "txHash": "0xdb3eda6e8d4e2087a1db21a45965a5461c75772f6ff5f3bdc06796738792dfaa",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)43_storage)",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "MockWethTest",
+            "label": "balanceOf",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "contracts\\mock\\MockWethTest.sol:15"
+          },
+          {
+            "contract": "MockWethTest",
+            "label": "weth",
+            "type": "t_contract(IWETH)6063",
+            "src": "contracts\\mock\\MockWethTest.sol:17"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_contract(IWETH)6063": {
+            "label": "contract IWETH"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)43_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)43_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "520d0db970d99b89ec204d289751a44a82d0a7ecbbc0aa1ecc61b05d96c6d4dc": {
+      "address": "0x4B6C3F0E632D6f2EeBb9A801ED536C0fA6C2dAC7",
+      "txHash": "0x94e3063add2f106d08c4ee341f8f3bcb54fd3bd76218391c491cbb78cb4760a5",
       "layout": {
         "storage": [
           {

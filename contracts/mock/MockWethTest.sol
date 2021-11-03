@@ -59,6 +59,11 @@ contract MockWethTest is Initializable, AccessControlUpgradeable
         weth = _weth;
     }
 
+    // we need to accept ETH sends to unwrap WETH
+    receive() external payable {
+        assert(msg.sender == address(weth)); // only accept ETH via fallback from the WETH contract
+    }
+
     // ============ Version Control ============
     function version() external pure returns (uint256) {
         return 101; // 1.0.1

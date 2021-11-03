@@ -69,6 +69,11 @@
       "address": "0x3b878601A16691800CDebEdBaf266e4ad0972adF",
       "txHash": "0x8f587797e52085fc0d65705eb3cfe70ce70bb783f0fb649440ab643737b0e02b",
       "kind": "transparent"
+    },
+    {
+      "address": "0x64f9C81FBe0AcB30Ca12238368c23727f47579e5",
+      "txHash": "0xcced52b49ecd391b7acceff8166791ff568c6c47a605b1ee6a1f86c04942a571",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -1365,6 +1370,107 @@
             "label": "weth",
             "type": "t_contract(IWETH)6063",
             "src": "contracts\\mock\\MockWethTest.sol:30"
+          }
+        ],
+        "types": {
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_contract(IWETH)6063": {
+            "label": "contract IWETH"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)43_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)43_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "520d0db970d99b89ec204d289751a44a82d0a7ecbbc0aa1ecc61b05d96c6d4dc": {
+      "address": "0xBF1D27ab90dAF30D3a9983aa83b8A1B206184890",
+      "txHash": "0xe84070fc1abef89559e015c0ef832b826850de9a86f91500efef1cb8c1d03268",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:26"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:30"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)43_storage)",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:63"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:219"
+          },
+          {
+            "contract": "MockWethTest",
+            "label": "balanceOf",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "contracts\\mock\\MockWethTest.sol:15"
+          },
+          {
+            "contract": "MockWethTest",
+            "label": "weth",
+            "type": "t_contract(IWETH)6063",
+            "src": "contracts\\mock\\MockWethTest.sol:17"
           }
         ],
         "types": {
