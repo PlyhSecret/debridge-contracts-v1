@@ -1,25 +1,12 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.7;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
-import "../interfaces/IERC20Permit.sol";
-import "../interfaces/IDeBridgeToken.sol";
-import "../interfaces/IDeBridgeTokenDeployer.sol";
-import "../interfaces/ISignatureVerifier.sol";
 import "../interfaces/IWETH.sol";
-import "../interfaces/IDeBridgeGate.sol";
-import "../interfaces/IConfirmationAggregator.sol";
-import "../interfaces/ICallProxy.sol";
-import "../interfaces/IFlashCallback.sol";
-import "../libraries/SignatureUtil.sol";
-import "../libraries/Flags.sol";
 
 contract MockWethTest is Initializable, AccessControlUpgradeable
 {
