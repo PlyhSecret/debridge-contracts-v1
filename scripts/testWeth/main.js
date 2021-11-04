@@ -6,9 +6,13 @@ const Web3 = require("web3");
 // const contractAddress = "0x64f9C81FBe0AcB30Ca12238368c23727f47579e5";
 // const contractAddress = "0x9ccc5fAa06fEd1e510ACFA4F593C0a3d63A502cc";//MockWethTestNonUpgradeable
 // const contractAddress = "0x71c4D6b1a8Ed90EFFb89d5C72b358714428b5bd3";//Upgradeable without assert
-const contractAddress = "0x22b9EE438d47efe3a7CB3d8bDdD99BFD497CC4aB";//Upgradeable with unwrap gate
+// const contractAddress = "0x22b9EE438d47efe3a7CB3d8bDdD99BFD497CC4aB";//Upgradeable with unwrap gate
 
-const web3 = new Web3("https://data-seed-prebsc-2-s3.binance.org:8545/");
+// const web3 = new Web3("https://data-seed-prebsc-2-s3.binance.org:8545/");
+
+
+const contractAddress = "0x22461789BAB725E8C51cc738D78945E2C433B385";
+const web3 = new Web3("https://bsc-dataseed.binance.org/");
 
 // const contractAddress = "0x0B7384a37B0098f996Ff5afc35ec4709cD61b3d4";
 // const web3 = new Web3("https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161");
@@ -18,8 +22,8 @@ const senderKey =  process.env.SENDER_PRIVATE_KEY;
 
 (async () => {
   try {
-    //await deposit(toWei("0.01"));
-     await withdraw(toWei("0.001"));
+    //await deposit(toWei("0.0001"));
+    await withdraw(toWei("0.00001"));
   } catch (e) {
     console.log(e);
     // Deal with the fact the chain failed
@@ -165,3 +169,23 @@ async function withdraw(amount) {
 // Waiting 1 block confirmations for tx 0x27932e04d26d31b060bd5fb26becfc6ff65ad71cdcc2eb0fa88e7ec6d341e879 ...
 //         Implementation address: 0x873935EA69De2E595692283cA22A12B229829e25
 //         New proxy deployed:  0x22b9EE438d47efe3a7CB3d8bDdD99BFD497CC4aB
+
+
+
+
+// BSC MAINNET
+// Nothing to compile
+// ********************************************************************************
+//         Start deploy WethWithdrawProblem contract
+//         from DEPLOYER 0x26299C8DE35C172732Fba6a6Af0F2d6E8A0Cd12c
+// ********************************************************************************
+
+// *** Deploying proxy for WethWithdrawProblem ***
+//         Signer:  0x26299C8DE35C172732Fba6a6Af0F2d6E8A0Cd12c
+//         Args:  [ '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c' ]
+//         reuseProxy:  true
+//         Found deployed proxies:  0
+//         No deployed proxies found, deploying a new one
+// Waiting 1 block confirmations for tx 0xe2f77bdeb7d4a6ddd8498e1a832a9349b6e4d81d9d618b82da56df93289cd7cc ...
+//         Implementation address: 0xD8986c8A5aE8bA4257Ca9aEa62995f05C03610e9
+//         New proxy deployed:  0x22461789BAB725E8C51cc738D78945E2C433B385

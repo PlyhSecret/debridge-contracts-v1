@@ -1,16 +1,12 @@
-// SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "../interfaces/IWETH.sol";
 
-contract MockWethTest is Initializable, AccessControlUpgradeable
+contract WethWithdrawProblem is Initializable, AccessControlUpgradeable
 {
-    using SafeERC20 for IERC20;
 
     mapping (address => uint) public balanceOf;
 
@@ -42,6 +38,8 @@ contract MockWethTest is Initializable, AccessControlUpgradeable
         weth = _weth;
     }
 
+    /* ========== METHODS ========== */
+
     function deposit() public payable {
         balanceOf[msg.sender] += msg.value;
         weth.deposit{value: msg.value}();
@@ -61,7 +59,6 @@ contract MockWethTest is Initializable, AccessControlUpgradeable
 
     // we need to accept ETH sends to unwrap WETH
     receive() external payable {
-        assert(msg.sender == address(weth)); // only accept ETH via fallback from the WETH contract
     }
 
     // ============ Version Control ============
