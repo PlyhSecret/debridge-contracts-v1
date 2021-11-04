@@ -3,7 +3,11 @@ const { toWei} = require("web3-utils");
 
 const mockWethTestAbi = require("./MockWethTest.json").abi;
 const Web3 = require("web3");
-const contractAddress = "0x64f9C81FBe0AcB30Ca12238368c23727f47579e5";
+// const contractAddress = "0x64f9C81FBe0AcB30Ca12238368c23727f47579e5";
+// const contractAddress = "0x9ccc5fAa06fEd1e510ACFA4F593C0a3d63A502cc";//MockWethTestNonUpgradeable
+// const contractAddress = "0x71c4D6b1a8Ed90EFFb89d5C72b358714428b5bd3";//Upgradeable without assert
+const contractAddress = "0x22b9EE438d47efe3a7CB3d8bDdD99BFD497CC4aB";//Upgradeable with unwrap gate
+
 const web3 = new Web3("https://data-seed-prebsc-2-s3.binance.org:8545/");
 
 // const contractAddress = "0x0B7384a37B0098f996Ff5afc35ec4709cD61b3d4";
@@ -15,7 +19,7 @@ const senderKey =  process.env.SENDER_PRIVATE_KEY;
 (async () => {
   try {
     //await deposit(toWei("0.01"));
-    await withdraw(toWei("0.001"));
+     await withdraw(toWei("0.001"));
   } catch (e) {
     console.log(e);
     // Deal with the fact the chain failed
@@ -122,7 +126,7 @@ async function withdraw(amount) {
 //         Implementation address: 0x4B6C3F0E632D6f2EeBb9A801ED536C0fA6C2dAC7
 //         New proxy deployed:  0x0B7384a37B0098f996Ff5afc35ec4709cD61b3d4
 
-// BSC
+// BSC without assert
 // *** Deploying proxy for MockWethTest ***
 //         Signer:  0xD40Ebb14A61B7d5691246a6437EeaC5ac7cE4D7e
 //         Args:  [ '0xae13d989dac2f0debff460ac112a837c89baa7cd' ]
@@ -132,3 +136,32 @@ async function withdraw(amount) {
 // Waiting 1 block confirmations for tx 0xcced52b49ecd391b7acceff8166791ff568c6c47a605b1ee6a1f86c04942a571 ...
 //         Implementation address: 0xBF1D27ab90dAF30D3a9983aa83b8A1B206184890
 //         New proxy deployed:  0x64f9C81FBe0AcB30Ca12238368c23727f47579e5
+
+
+
+
+//BSC Without assert
+// *** Deploying proxy for MockWethTest ***
+//         Signer:  0xD40Ebb14A61B7d5691246a6437EeaC5ac7cE4D7e
+//         Args:  [ '0xae13d989dac2f0debff460ac112a837c89baa7cd' ]
+//         reuseProxy:  true
+//         Found deployed proxies:  0
+//         No deployed proxies found, deploying a new one
+// Waiting 1 block confirmations for tx 0xcf1a9a763c9539d2074c2fff3dfb1817e34fd0f228aeb3925c01b950ca41ea2b ...
+//         Implementation address: 0x02a94609A232da73ce7a2342FD3DEA226Aa980B7
+//         New proxy deployed:  0x71c4D6b1a8Ed90EFFb89d5C72b358714428b5bd3
+
+
+// TEST WITH WETH GATE
+// *** Deploying proxy for MockWethTestWithGate ***
+//         Signer:  0xD40Ebb14A61B7d5691246a6437EeaC5ac7cE4D7e
+//         Args:  [
+//   '0xae13d989dac2f0debff460ac112a837c89baa7cd',
+//   '0xDcE3016dB5c28752EDBA6a18172d4A6f7917D5b6'
+// ]
+//         reuseProxy:  true
+//         Found deployed proxies:  0
+//         No deployed proxies found, deploying a new one
+// Waiting 1 block confirmations for tx 0x27932e04d26d31b060bd5fb26becfc6ff65ad71cdcc2eb0fa88e7ec6d341e879 ...
+//         Implementation address: 0x873935EA69De2E595692283cA22A12B229829e25
+//         New proxy deployed:  0x22b9EE438d47efe3a7CB3d8bDdD99BFD497CC4aB
