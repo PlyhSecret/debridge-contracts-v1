@@ -74,6 +74,7 @@ contract("DeBridgeGate full with auto", function () {
     this.minConfirmations = 3;
     this.confirmationThreshold = 5; //Confirmations per block before extra check enabled.
     this.excessConfirmations = 3; //Confirmations count in case of excess activity.
+    this.secondsInEpoch = 5;
 
     //   function initialize(
     //     uint256 _minConfirmations,
@@ -84,6 +85,7 @@ contract("DeBridgeGate full with auto", function () {
       this.minConfirmations,
       this.confirmationThreshold,
       this.excessConfirmations,
+      this.secondsInEpoch,
     ]);
 
     await this.confirmationAggregator.deployed();

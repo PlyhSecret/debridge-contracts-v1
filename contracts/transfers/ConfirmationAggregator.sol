@@ -7,14 +7,15 @@ import "../interfaces/IConfirmationAggregator.sol";
 contract ConfirmationAggregator is AggregatorBase, IConfirmationAggregator {
     /* ========== STATE VARIABLES ========== */
 
-    uint8 public confirmationThreshold; // required confirmations per block after extra check enabled
+    uint256 public confirmationThreshold; // required confirmations per epoch after extra check enabled
 
     mapping(bytes32 => bytes32) public confirmedDeployInfo; // debridge Id => deploy Id
     mapping(bytes32 => DebridgeDeployInfo) public getDeployInfo; // mint id => debridge info
     mapping(bytes32 => SubmissionInfo) public getSubmissionInfo; // mint id => submission info
 
-    uint40 public submissionsInBlock; //submissions count in current block
-    uint40 public currentBlock; //Current block
+    uint256 public submissionsInEpoch; // number of submissions in current epoch
+    uint256 public epoch; // Current epoch
+    uint256 public secondsInEpoch; // number of seconds in one epoch
 
 
     /* ========== CONSTRUCTOR  ========== */
@@ -26,9 +27,11 @@ contract ConfirmationAggregator is AggregatorBase, IConfirmationAggregator {
     function initialize(
         uint8 _minConfirmations,
         uint8 _confirmationThreshold,
-        uint8 _excessConfirmations
+        uint8 _excessConfirmations,
+        uint256 _secondsInEpoch
     ) public initializer {
         AggregatorBase.initializeBase(_minConfirmations, _excessConfirmations);
+        secondsInEpoch = _secondsInEpoch;
         confirmationThreshold = _confirmationThreshold;
     }
 
@@ -92,11 +95,12 @@ contract ConfirmationAggregator is AggregatorBase, IConfirmationAggregator {
         }
         submissionInfo.hasVerified[msg.sender] = true;
         if (submissionInfo.confirmations >= minConfirmations) {
-            if (currentBlock != uint40(block.number)) {
-                currentBlock = uint40(block.number);
-                submissionsInBlock = 0;
+            uint256 currentEpoch = block.timestamp / secondsInEpoch;
+            if (epoch != currentEpoch) {
+                epoch = currentEpoch;
+                submissionsInEpoch = 0;
             }
-            bool requireExtraCheck = submissionsInBlock >= confirmationThreshold;
+            bool requireExtraCheck = submissionsInEpoch >= confirmationThreshold;
 
             if (
                 submissionInfo.requiredConfirmations >= requiredOraclesCount &&
@@ -104,7 +108,7 @@ contract ConfirmationAggregator is AggregatorBase, IConfirmationAggregator {
                 (!requireExtraCheck ||
                     (requireExtraCheck && submissionInfo.confirmations >= excessConfirmations))
             ) {
-                submissionsInBlock += 1;
+                submissionsInEpoch += 1;
                 submissionInfo.isConfirmed = true;
                 emit SubmissionApproved(_submissionId);
             }
@@ -127,6 +131,13 @@ contract ConfirmationAggregator is AggregatorBase, IConfirmationAggregator {
         confirmationThreshold = _confirmationThreshold;
     }
 
+    /// @dev Sets number of seconds in one epoch.
+    /// @param _secondsInEpoch New number of seconds in one epoch
+    function setSecondsInEpoch(uint256 _secondsInEpoch) external onlyAdmin {
+        if (_secondsInEpoch == 0) revert WrongArgument();
+        secondsInEpoch = _secondsInEpoch;
+    }
+
     /* ========== VIEW ========== */
 
     /// @dev Returns whether transfer request is confirmed.
@@ -146,6 +157,6 @@ contract ConfirmationAggregator is AggregatorBase, IConfirmationAggregator {
 
     // ============ Version Control ============
     function version() external pure returns (uint256) {
-        return 101; // 1.0.1
+        return 102; // 1.0.2
     }
 }

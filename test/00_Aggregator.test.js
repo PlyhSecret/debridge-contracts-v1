@@ -22,6 +22,7 @@ contract("ConfirmationAggregator", function () {
     this.minConfirmations = 2;
     this.confirmationThreshold = 5; //Confirmations per block before extra check enabled.
     this.excessConfirmations = 3; //Confirmations count in case of excess activity.
+    this.secondsInEpoch = 5;
 
     const ConfirmationAggregator = await ethers.getContractFactory("ConfirmationAggregator", alice);
 
@@ -35,6 +36,7 @@ contract("ConfirmationAggregator", function () {
       this.minConfirmations,
       this.confirmationThreshold,
       this.excessConfirmations,
+      this.secondsInEpoch,
     ]);
     this.initialOracles = [alice, bob, eve];
     await this.aggregator.deployed();

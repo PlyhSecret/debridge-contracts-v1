@@ -61,6 +61,7 @@ contract("DeBridgeGate light mode", function () {
     this.minConfirmations = Math.floor(oracleKeys.length/2) + 2;
     this.confirmationThreshold = 5; //Confirmations per block before extra check enabled.
     this.excessConfirmations = 7; //Confirmations count in case of excess activity.
+    this.secondsInEpoch = 5;
 
     console.log("minConfirmations: " + this.minConfirmations);
     console.log("confirmationThreshold: " + this.confirmationThreshold);
@@ -75,6 +76,7 @@ contract("DeBridgeGate light mode", function () {
       this.minConfirmations,
       this.confirmationThreshold,
       this.excessConfirmations,
+      this.secondsInEpoch,
     ]);
 
     await this.confirmationAggregator.deployed();
@@ -88,6 +90,7 @@ contract("DeBridgeGate light mode", function () {
       this.minConfirmations,
       this.confirmationThreshold,
       this.excessConfirmations,
+      this.secondsInEpoch,
       ZERO_ADDRESS,
     ]);
     await this.signatureVerifier.deployed();

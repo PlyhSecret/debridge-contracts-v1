@@ -456,6 +456,7 @@ contract("DeBridgeGate full mode", function () {
             this.amountThreshols = toWei("1000");
             this.minConfirmations = 4;
             this.confirmationThreshold = 5; //Confirmations per block before extra check enabled.
+            this.secondsInEpoch = 5;
             const ConfirmationAggregator = await ethers.getContractFactory(
               "ConfirmationAggregator",
               alice.address
@@ -465,6 +466,7 @@ contract("DeBridgeGate full mode", function () {
               this.minConfirmations,
               this.confirmationThreshold,
               excessConfirmations,
+              this.secondsInEpoch,
             ]);
 
             await this.confirmationAggregator.deployed();

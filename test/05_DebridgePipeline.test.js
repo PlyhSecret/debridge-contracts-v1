@@ -186,10 +186,14 @@ contract("DeBridgeGate real pipeline mode", function () {
     //     uint256 _confirmationThreshold,
     //     uint256 _excessConfirmations,
     // )
+
+    const secondsInEpoch = 5;
+
     this.confirmationAggregatorBSC = await upgrades.deployProxy(ConfirmationAggregatorFactory, [
       this.minConfirmations,
       this.confirmationThreshold,
       this.excessConfirmations,
+      secondsInEpoch
     ]);
 
     await this.confirmationAggregatorBSC.deployed();
@@ -198,6 +202,7 @@ contract("DeBridgeGate real pipeline mode", function () {
       this.minConfirmations,
       this.confirmationThreshold,
       this.excessConfirmations,
+      secondsInEpoch
     ]);
 
     await this.confirmationAggregatorHECO.deployed();
@@ -206,6 +211,7 @@ contract("DeBridgeGate real pipeline mode", function () {
       this.minConfirmations,
       this.confirmationThreshold,
       this.excessConfirmations,
+      secondsInEpoch,
       ZERO_ADDRESS,
     ]);
     await this.signatureVerifierETH.deployed();

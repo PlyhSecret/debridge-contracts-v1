@@ -11,12 +11,13 @@ contract SignatureVerifier is AggregatorBase, ISignatureVerifier {
 
     /* ========== STATE VARIABLES ========== */
 
-    uint8 public confirmationThreshold; // required confirmations per block after extra check enabled
+    uint256 public confirmationThreshold; // required confirmations per epoch after extra check enabled
 
-    uint40 public submissionsInBlock; //submissions count in current block
-    uint40 public currentBlock; //Current block
+    uint256 public submissionsInEpoch; // number of submissions in current epoch
+    uint256 public epoch; // Current epoch
 
     address public debridgeAddress; // Debridge gate address
+    uint256 public secondsInEpoch; // number of seconds in one epoch
 
     /* ========== ERRORS ========== */
 
@@ -42,9 +43,11 @@ contract SignatureVerifier is AggregatorBase, ISignatureVerifier {
         uint8 _minConfirmations,
         uint8 _confirmationThreshold,
         uint8 _excessConfirmations,
+        uint256 _secondsInEpoch,
         address _debridgeAddress
     ) public initializer {
         AggregatorBase.initializeBase(_minConfirmations, _excessConfirmations);
+        secondsInEpoch = _secondsInEpoch;
         confirmationThreshold = _confirmationThreshold;
         debridgeAddress = _debridgeAddress;
     }
@@ -96,17 +99,18 @@ contract SignatureVerifier is AggregatorBase, ISignatureVerifier {
             revert NotConfirmedByRequiredOracles();
 
         if (confirmations >= minConfirmations) {
-            // TODO: don't update state when verifying new asset deploy
-            if (currentBlock == uint40(block.number)) {
-                submissionsInBlock += 1;
+            // TODO: don't update submissionsInEpoch when verifying new asset deploy
+            uint256 currentEpoch = block.timestamp % secondsInEpoch;
+            if (epoch == currentEpoch) {
+                submissionsInEpoch += 1;
             } else {
-                currentBlock = uint40(block.number);
-                submissionsInBlock = 1;
+                epoch = currentEpoch;
+                submissionsInEpoch = 1;
             }
             emit SubmissionApproved(_submissionId);
         }
 
-        if (submissionsInBlock > confirmationThreshold) {
+        if (submissionsInEpoch > confirmationThreshold) {
             if (confirmations < excessConfirmations) revert NotConfirmedThreshold();
         }
 
@@ -120,6 +124,13 @@ contract SignatureVerifier is AggregatorBase, ISignatureVerifier {
     function setThreshold(uint8 _confirmationThreshold) external onlyAdmin {
         if (_confirmationThreshold == 0) revert WrongArgument();
         confirmationThreshold = _confirmationThreshold;
+    }
+
+    /// @dev Sets number of seconds in one epoch.
+    /// @param _secondsInEpoch New number of seconds in one epoch
+    function setSecondsInEpoch(uint256 _secondsInEpoch) external onlyAdmin {
+        if (_secondsInEpoch == 0) revert WrongArgument();
+        secondsInEpoch = _secondsInEpoch;
     }
 
     /// @dev Sets core debridge conrtact address.
@@ -151,6 +162,6 @@ contract SignatureVerifier is AggregatorBase, ISignatureVerifier {
 
     // ============ Version Control ============
     function version() external pure returns (uint256) {
-        return 101; // 1.0.1
+        return 102; // 1.0.2
     }
 }
