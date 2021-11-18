@@ -93,7 +93,8 @@ contract("DeBridgeGate full mode", function () {
           fixedNativeFee,
           isSupported,
         },
-      ]
+      ],
+      false
     );
 
     await this.deBridgeTokenDeployer.setDebridgeAddress(this.debridge.address);
@@ -165,7 +166,7 @@ contract("DeBridgeGate full mode", function () {
         transferFeeBps: 100,
       };
 
-      const updChainTx = await this.debridge.updateChainSupport([42], [newChainInfo], {
+      const updChainTx = await this.debridge.updateChainSupport([42], [newChainInfo], false, {
         from: alice.address,
       });
 
@@ -185,7 +186,7 @@ contract("DeBridgeGate full mode", function () {
       const { isSupported: isSupportedBefore } = await this.debridge.getChainToConfig([42]);
 
       // switch to false
-      const setChainFalseTx = await this.debridge.setChainSupport(chainId, support, {
+      const setChainFalseTx = await this.debridge.setChainSupport(chainId, support, false,{
         from: alice.address,
       });
 
@@ -198,7 +199,7 @@ contract("DeBridgeGate full mode", function () {
 
       // switch backway (to true)
       support = true;
-      const setChainTrueTx = await this.debridge.setChainSupport(chainId, support, {
+      const setChainTrueTx = await this.debridge.setChainSupport(chainId, support, false, {
         from: alice.address,
       });
       const { isSupported: isSupportedAfter } = await this.debridge.getChainToConfig([42]);
@@ -275,7 +276,7 @@ contract("DeBridgeGate full mode", function () {
       };
 
       await expectRevert(
-        this.debridge.connect(bob).updateChainSupport([42], [newChainInfo]),
+        this.debridge.connect(bob).updateChainSupport([42], [newChainInfo], false),
         "AdminBadRole()"
       );
     });
@@ -296,7 +297,7 @@ contract("DeBridgeGate full mode", function () {
       const chainId = 42;
 
       await expectRevert(
-        this.debridge.connect(bob).setChainSupport(chainId, support),
+        this.debridge.connect(bob).setChainSupport(chainId, support, false),
         "AdminBadRole()"
       );
     });

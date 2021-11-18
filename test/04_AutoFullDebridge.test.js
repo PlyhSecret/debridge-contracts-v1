@@ -175,7 +175,8 @@ contract("DeBridgeGate full with auto", function () {
           fixedNativeFee,
           isSupported,
         },
-      ]
+      ],
+      false
     );
 
     const GOVMONITORING_ROLE = await this.debridge.GOVMONITORING_ROLE();

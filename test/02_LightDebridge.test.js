@@ -177,7 +177,8 @@ contract("DeBridgeGate light mode", function () {
           fixedNativeFee,
           isSupported,
         },
-      ]
+      ],
+      false
     );
 
     const GOVMONITORING_ROLE = await this.debridge.GOVMONITORING_ROLE();

@@ -75,7 +75,8 @@ module.exports = async function({getNamedAccounts, deployments, network}) {
   console.log(deployInitParams.chainSupportInfo);
   const updateChainSupportTx = await deBridgeGateInstance.updateChainSupport(
     deployInitParams.supportedChains,
-    deployInitParams.chainSupportInfo
+    deployInitParams.chainSupportInfo,
+    false
     //  [bscChainId, hecoChainId],
     //  [
     //      {

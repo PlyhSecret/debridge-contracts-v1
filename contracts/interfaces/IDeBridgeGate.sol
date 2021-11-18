@@ -61,13 +61,11 @@ interface IDeBridgeGate {
     }
 
     struct FeeInfo {
-        // uint256 initialAmount;
-        uint256 amountAfterFee;
-        uint256 fixedNativeFee;
-        uint256 fixedAssetFee;
+        uint256 initialAmount;
+        uint256 fixFee;
         uint256 transferFee;
-        // bool useAssetFee;
-        // bool isNativeToken;
+        bool useAssetFee;
+        bool isNativeToken;
     }
 
     /* ========== FUNCTIONS ========== */
@@ -136,15 +134,15 @@ interface IDeBridgeGate {
     event Sent(
         bytes32 submissionId,
         bytes32 indexed debridgeId,
-        // uint256 amount,
+        uint256 amount,
         bytes receiver,
         uint256 nonce,
         uint256 indexed chainIdTo,
         uint32 referralCode,
         FeeInfo feeInfo,
         bytes autoParams,
-        address nativeSender,
-        bool isNativeToken
+        address nativeSender
+        // bool isNativeToken
     ); // emited once the native tokens are locked to be sent to the other chain
 
     event Claimed(
